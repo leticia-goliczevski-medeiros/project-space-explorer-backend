@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const { authRouter } = require('./routes/authRoutes.js');
 const { userRouter } = require('./routes/usersRoutes.js');
+const { authorize } = require('./middlewares/auth');
 
 const app = express();
 
@@ -13,7 +14,7 @@ app.use(express.json());
 
 app.use(authRouter);
 
-app.use(userRouter);
+app.use(authorize, userRouter);
 
 app.listen(3000, () => {
   console.log(`App listening at port 3000`);
