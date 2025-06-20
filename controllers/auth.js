@@ -1,6 +1,8 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
+const ServerError = require('../errors/serverError');
+const ConflictError = require('../errors/conflictError');
 
 function login(req, res) {
   const { email, password } = req.body;
@@ -27,14 +29,14 @@ function createUser(req, res) {
     }))
     .then((user) => {
       if (!user) {
-        console.log('Unable to create the user.');
+        throw new ServerError('Unable to create the user.');
       }
 
       res.status(201).send({ email: user.email, _id: user._id });
     })
     .catch((error) => {
       if (error.code === 11000) {
-        return console.log('This email has already been registered.');
+        return new ConflictError('This email has already been registered.');
       }
       return console.log(error);
     });
