@@ -1,10 +1,22 @@
 const express = require('express');
 const { createUser, login } = require('../controllers/auth');
+const { Joi, celebrate } = require('celebrate');
+const { validateEmail } = require('../middlewares/validation');
 
 const authRouter = express.Router();
 
-authRouter.post('/signin', login);
+authRouter.post('/signin', celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().custom(validateEmail).required(),
+    password: Joi.string().required(),
+  }),
+}), login);
 
-authRouter.post('/signup', createUser);
+authRouter.post('/signup', celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().custom(validateEmail).required(),
+    password: Joi.string().required(),
+  }),
+}), createUser);
 
 module.exports = { authRouter };

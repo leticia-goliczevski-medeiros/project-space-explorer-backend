@@ -1,7 +1,10 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const { errors } = require('celebrate');
+
 const { authRouter } = require('./routes/authRoutes.js');
 const { userRouter } = require('./routes/usersRoutes.js');
+
 const { authorize } = require('./middlewares/auth');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { errorHandler } = require('./middlewares/errorHandler');
@@ -21,6 +24,8 @@ app.use(authRouter);
 app.use(authorize, userRouter);
 
 app.use(errorLogger);
+
+app.use(errors());
 
 app.use(errorHandler);
 
