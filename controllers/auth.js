@@ -4,7 +4,7 @@ const User = require('../models/user');
 const ServerError = require('../errors/serverError');
 const ConflictError = require('../errors/conflictError');
 
-function login(req, res) {
+function login(req, res, next) {
   const { email, password } = req.body;
 
   return User.findUserByCredentials(email, password)
@@ -14,11 +14,11 @@ function login(req, res) {
       res.send({ token });
     })
     .catch((error) => {
-      console.log(error);
+      next(error);
     });
 }
 
-function createUser(req, res) {
+function createUser(req, res, next) {
   const {
     email, password,
   } = req.body;
@@ -36,9 +36,9 @@ function createUser(req, res) {
     })
     .catch((error) => {
       if (error.code === 11000) {
-        return new ConflictError('This email has already been registered.');
+        return next(new ConflictError('This email has already been registered.'));
       }
-      return console.log(error);
+      return next(error);
     });
 }
 

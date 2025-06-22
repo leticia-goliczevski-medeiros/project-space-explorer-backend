@@ -4,7 +4,7 @@ const User = require('../models/user');
 const InvalidDataError = require('../errors/invalidDataError');
 const ServerError = require('../errors/serverError');
 
-function addCardLike(req, res) {
+function addCardLike(req, res, next) {
   const { title, explanation, url, date } = req.body;
   const userId = req.user._id;
 
@@ -34,17 +34,17 @@ function addCardLike(req, res) {
           throw new ServerError(`Failed to like the card with ID ${card._id}.`);
         })
         .then((user) => res.send(user.gallery))
-        .catch((error)=> {
-          console.log(error);
+        .catch((error) => {
+          next(error);
         });
     })
     .then((user) => res.send(user))
-    .catch((error)=> {
-      console.log(error);
+    .catch((error) => {
+      next(error);
     });
 }
 
-function removeCardLike(req, res) {
+function removeCardLike(req, res, next) {
   const { id: cardId } = req.params;
   const userId = req.user._id;
 
@@ -57,8 +57,8 @@ function removeCardLike(req, res) {
       throw new ServerError(`Failed to unlike the card with ID ${cardId}.`);
     })
     .then((user) => res.send(user))
-    .catch((error)=> {
-      console.log(error);
+    .catch((error) => {
+      next(error);
     });
 }
 

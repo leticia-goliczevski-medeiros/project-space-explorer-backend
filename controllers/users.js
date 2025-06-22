@@ -1,7 +1,7 @@
 const User = require('../models/user');
 const NotFoundError = require('../errors/notFoundError');
 
-function getUser(req, res) {
+function getUser(req, res, next) {
   const userId = req.user._id;
 
   User.findById(userId)
@@ -10,18 +10,18 @@ function getUser(req, res) {
     })
     .then((user) => res.send(user))
     .catch((error) => {
-      console.log(error);
+      next(error);
     });
 }
 
-function getUserGallery(req, res) {
+function getUserGallery(req, res, next) {
   User.findById(req.user._id).populate('gallery')
     .orFail(() => {
       throw new NotFoundError('Gallery not found for this user.');
     })
     .then((user) => res.send(user))
     .catch((error) => {
-      console.log(error);
+      next(error);
     });
 }
 
