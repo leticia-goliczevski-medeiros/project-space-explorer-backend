@@ -14,4 +14,15 @@ function getUser(req, res) {
     });
 }
 
-module.exports = { getUser };
+function getUserGallery(req, res) {
+  User.findById(req.user._id).populate('gallery')
+    .orFail(() => {
+      throw new NotFoundError('Gallery not found for this user.');
+    })
+    .then((user) => res.send(user))
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
+module.exports = { getUser, getUserGallery };
