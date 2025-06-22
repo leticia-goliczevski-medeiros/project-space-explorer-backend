@@ -4,12 +4,6 @@ const bcrypt = require('bcryptjs');
 const UnauthorizedError = require('../errors/unauthorizedError');
 
 const userSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    minlength: 2,
-    maxlength: 30,
-    default: 'User name',
-  },
   email: {
     type: String,
     required: true,
@@ -26,6 +20,11 @@ const userSchema = new mongoose.Schema({
     required: true,
     select: false,
   },
+  gallery: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: 'card',
+    default: [],
+  }
 });
 
 userSchema.statics.findUserByCredentials = function findUserByCredentials(email, password) {
