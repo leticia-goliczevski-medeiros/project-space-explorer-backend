@@ -1,6 +1,8 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
+const helmet = require('helmet');
+const rateLimiter = require('./middlewares/rateLimiter');
 const { errors } = require('celebrate');
 
 const { authRouter } = require('./routes/authRoutes');
@@ -17,6 +19,9 @@ mongoose.connect(process.env.MONGO_URI || 'mongodb://0.0.0.0:27017/spaceexplorer
   .catch((error) => console.log('Error connecting to the database: ', error));
 
 app.use(express.json());
+
+app.use(helmet());       
+app.use(rateLimiter);
 
 app.use(requestLogger);
 
