@@ -2,13 +2,11 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const helmet = require('helmet');
-const rateLimiter = require('./middlewares/rateLimiter');
 const { errors } = require('celebrate');
+const rateLimiter = require('./middlewares/rateLimiter');
 
-const { authRouter } = require('./routes/authRoutes');
-const { userRouter } = require('./routes/usersRoutes');
+const routes = require('./routes');
 
-const { authorize } = require('./middlewares/auth');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { errorHandler } = require('./middlewares/errorHandler');
 
@@ -20,14 +18,12 @@ mongoose.connect(process.env.MONGO_URI || 'mongodb://0.0.0.0:27017/spaceexplorer
 
 app.use(express.json());
 
-app.use(helmet());       
+app.use(helmet());
 app.use(rateLimiter);
 
 app.use(requestLogger);
 
-app.use(authRouter);
-
-app.use(authorize, userRouter);
+app.use(routes);
 
 app.use(errorLogger);
 
