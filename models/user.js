@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema({
     type: [mongoose.Schema.Types.ObjectId],
     ref: 'card',
     default: [],
-  }
+  },
 });
 
 userSchema.statics.findUserByCredentials = function findUserByCredentials(email, password) {

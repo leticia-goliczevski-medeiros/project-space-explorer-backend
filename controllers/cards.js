@@ -5,7 +5,9 @@ const InvalidDataError = require('../errors/invalidDataError');
 const ServerError = require('../errors/serverError');
 
 function addCardLike(req, res, next) {
-  const { title, explanation, url, date } = req.body;
+  const {
+    title, explanation, url, date,
+  } = req.body;
   const userId = req.user._id;
 
   if (!title || !explanation || !url || !date) {
@@ -22,22 +24,22 @@ function addCardLike(req, res, next) {
         return existingCard;
       }
 
-      return Card.create({ title, explanation, url, date });
+      return Card.create({
+        title, explanation, url, date,
+      });
     })
-    .then((card) => {
-      return User.findByIdAndUpdate(
-        userId,
-        { $addToSet: { gallery: card._id } },
-        { new: true }
-      ).populate('gallery')
-        .orFail(() => {
-          throw new ServerError(`Failed to like the card with ID ${card._id}.`);
-        })
-        .then((user) => res.send(user.gallery))
-        .catch((error) => {
-          next(error);
-        });
-    })
+    .then((card) => User.findByIdAndUpdate(
+      userId,
+      { $addToSet: { gallery: card._id } },
+      { new: true },
+    ).populate('gallery')
+      .orFail(() => {
+        throw new ServerError(`Failed to like the card with ID ${card._id}.`);
+      })
+      .then((user) => res.send(user.gallery))
+      .catch((error) => {
+        next(error);
+      }))
     .then((user) => res.send(user))
     .catch((error) => {
       next(error);
@@ -51,7 +53,7 @@ function removeCardLike(req, res, next) {
   User.findByIdAndUpdate(
     userId,
     { $pull: { gallery: cardId } },
-    { new: true }
+    { new: true },
   ).populate('gallery')
     .orFail(() => {
       throw new ServerError(`Failed to unlike the card with ID ${cardId}.`);
@@ -64,5 +66,5 @@ function removeCardLike(req, res, next) {
 
 module.exports = {
   addCardLike,
-  removeCardLike
+  removeCardLike,
 };

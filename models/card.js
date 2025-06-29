@@ -24,7 +24,7 @@ const cardSchema = new mongoose.Schema({
     type: String,
     required: true,
     match: /^\d{4}-\d{2}-\d{2}$/,
-  }
+  },
 });
 
 module.exports = mongoose.model('card', cardSchema);
