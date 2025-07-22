@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const helmet = require('helmet');
+const cors = require('cors');
 const { errors } = require('celebrate');
 const rateLimiter = require('./middlewares/rateLimiter');
 
@@ -11,6 +12,10 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { errorHandler } = require('./middlewares/errorHandler');
 
 const app = express();
+
+app.use(cors({
+  origin: 'http://localhost:5173'
+}));
 
 mongoose.connect(process.env.MONGO_URI || 'mongodb://0.0.0.0:27017/spaceexplorer')
   .then(() => console.log('Database connected!'))
