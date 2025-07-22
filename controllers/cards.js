@@ -36,7 +36,7 @@ function addCardLike(req, res, next) {
       .orFail(() => {
         throw new ServerError(`Failed to like the card with ID ${card._id}.`);
       })
-      .then((user) => res.send(user.gallery))
+      .then((user) => res.send(user))
       .catch((error) => {
         next(error);
       }))
