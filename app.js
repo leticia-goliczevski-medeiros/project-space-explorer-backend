@@ -14,7 +14,7 @@ const { errorHandler } = require('./middlewares/errorHandler');
 const app = express();
 
 app.use(cors({
-  origin: 'http://localhost:5173'
+  origin: 'https://space-explorer-frontend.vercel.app/'
 }));
 
 mongoose.connect(process.env.MONGO_URI || 'mongodb://0.0.0.0:27017/spaceexplorer')
